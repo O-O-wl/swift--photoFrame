@@ -10,6 +10,8 @@
 
 <a href ="#4-Step4---Segue">Step4 - Segue</a>
 
+<a href ="#5-Step5---ViewController">Step5 - ViewController</a>
+
 ---
 
 # Intro
@@ -464,5 +466,200 @@ y = 7
 
   - **segue**의 트리거를 드래그해서 **exit**에 놓는다. 
   - **IBAction**으로 정의된 메소드 목록이 노출되고 거기에 연결된다.
+  
+  ---
+  
+  
+
+### 5. Step5 - ViewController
 
 
+
+- **Responsibility**
+
+  - 주요한 데이터의 변화에 응답으로 뷰들의 컨텐트들을 업데이트 한다. 
+
+  - 뷰들과 함께 사용자와의 대화에 응답한다. - 이벤트 핸들링
+
+  - 뷰들의 사이즈 재조정과 전반적인 인터페이스의 레이아웃을 관리한다.
+
+  - 다른 객체(뷰컨트롤러 등)들과 함께 앱을 구성한다.
+
+    
+
+- **ViewController Type**
+
+  - **Content view controller **
+
+    - 앱의 컨텐트의 일부분을 관리하는 뷰 컨트롤러 
+    - 자신의 모든 뷰들을 스스로 관리한다.
+
+  - **Container view controller**
+
+    - 다른 뷰 컨트롤러들로 부터 정보를 모은다.
+
+    - 자신의 뷰들과 자신의 자식 뷰컨트롤러들의 root view들을 관리한다.
+
+    - 직접 자식 뷰컨트롤러릐 컨텐츠를 관리하지는 않고 root view의 크기조절과 위치조절에 대해서만 관리한다. 
+
+      
+
+- **Life Cycle Method**
+
+  - **`viewDidLoad()`**
+
+    - 뷰컨트롤러의 `var view: UIView! `프로퍼티는 지연로딩된다. view가 필요로 될 때 view가 nil이면 `loadView()` 메소드를 호출하여 view를 로드한다.
+    - **`loadView()`직 후**에 호출되는 콜백메소드이다.
+
+  - **`viewWillAppear()`**
+
+    - 뷰컨트롤러의  root view 가 로드된 이후에 **window 의 뷰 계층으로 더해지기 직 전** 호출되는 메소드이다.
+
+  - **`viewDidAppear()`**
+
+    - window 의 root view가 **뷰 계층으로 더해진 직 후** 호출되는 메소드이다.
+
+  - **`viewWillDisAppear()`**
+
+    - window 의 root view가 **뷰 계층에서 제거되기 직 전** 호출되는 메소드이다.
+
+  - **`viewDidDisAppear()`**
+
+    - window 의 root view가 **뷰 계층에서 제거된 직 후** 호출되는 메소드이다.
+
+      
+
+    ![UIViewController_Class_Reference_2x_ddcaa00c-87d8-4c85-961e-ccfb9fa4aac2](https://user-images.githubusercontent.com/39197978/61628981-aac03e00-acbe-11e9-9f8a-51ce0654d005.png)
+
+**Tip**
+
+- **뷰 컨트롤러**는 **데이터 객체와 뷰 사이의 중개자**이다.
+
+- 뷰 컨트롤러와 모델(데이터 오브젝트)의 책임을 깔끔하게 분리하는 걸 유지 해야한다.
+
+- **뷰 컨트롤러는** **Responder객체**이고 Responder Chain 에 연결된다. 따라서 view controller 도 **이벤트 헨들링**을 할 수있다. 
+
+  
+
+- **View Life Cycle**
+
+  **Present - CurrentContext / FullScreen 은 presentingViewController 의 rootView를 뷰계층에서 제거한다**
+
+  **Present -  OverCurrentContext / OverFullScreen 은 presentingViewController 의 rootView를 뷰계층에서 제거하지 않는다**
+
+  
+
+  - #### Present  - CurrentContext, fullScreen
+
+    - ![Context](https://user-images.githubusercontent.com/39197978/61656913-b894b400-acfc-11e9-9bc2-e37338d4f466.gif)
+
+    - **Present : beforeViewController -> afterViewController**
+
+    - ```
+      - afterViewController.viewDidload()
+      - beforeViewController.viewWillDisAppear()
+      - afterViewController.viewWillAppear()
+      - afterViewController.viewDidAppear()
+      - beforeViewController.viewDisappear()
+      ```
+
+    - **Dissmiss : afterViewController -> beforeViewController**
+
+    - ```
+      - afterViewController.viewWillDisappear()
+      - beforeViewController.viewWillAppear()
+      - beforeViewController.viewWillAppear()
+      - afterViewController.viewDisDisappear()
+      ```
+
+      **뷰 계층에서 사라질 뷰**  `WillDisappear()`
+
+      **뷰 계층에 추가될 뷰**	`WillAppear()`
+
+      **뷰 계층에 추가된 뷰**	`DidAppear()`
+
+      **뷰 계층에서 사라질 뷰 **	`DidDisappear() `
+
+      의 순서를 거치며 view가 전환된다.
+
+      
+
+      **CurrentContext / FullScreen 은 기존 presentingViewController 의 rootView가 뷰의 계층(window의 subView)에서 제거 된다.** 
+
+      따라서 최상단에 뜰 뷰 이전의 뷰가 disAppear()되는 생명주기 메소드가 호출된다.
+
+  ---
+
+  - #### Present  - OverCurrentContext, OverFullScreen
+
+    
+
+    ![OverContext](https://user-images.githubusercontent.com/39197978/61656916-b92d4a80-acfc-11e9-8d79-fa93f91127ff.gif)
+
+    
+
+    - **Present : beforeViewController -> afterViewController**
+
+    - ```
+      - afterViewController.viewDidload()
+      - afterViewController.viewWillAppear()
+      - afterViewController.viewDidAppear()
+      ```
+
+    - **Dissmiss : afterViewController -> beforeViewController**
+
+    - ```
+      - afterViewController.viewWillDisappear()
+      - afterViewController.viewDisDisappear()
+      ```
+
+      **뷰 계층에 추가될 뷰**	`WillAppear()`
+
+      **뷰 계층에 추가될 뷰**	`DidAppear()`
+
+      **뷰 계층에서 사라질 뷰 **	`DidDisappear() `
+
+      의 순서를 거치며 view가 전환된다.
+
+      
+
+      **OverCurrentContext / OverFullScreen 은 기존 presentingViewController 의 rootView가 뷰의 계층(window의 subView)에서 제거되지 않는다.** 
+
+      **Present** 시 `disappear` 되지 않으며,  **dismiss**시 다시 `appear `도 다시 호출되지 않는다 
+
+  
+
+  
+
+  - #### Show (Push)
+
+    - **NavigationViewController 에서의 Life Cycle 호출 순서**
+
+  
+
+  ![NaviLifeCycle](https://user-images.githubusercontent.com/39197978/61656914-b92d4a80-acfc-11e9-9042-adab6452c663.gif)
+
+  
+
+  - **Push : beforeView -> afterView**
+
+  - ```
+    - afterViewController.viewDidload()
+    - beforeViewController.viewWillDisappear()
+    - afterViewController.viewWillAppear()
+    - beforeViewController.viewDidDisappear()
+    - afterViewController.viewDidAppear()
+    ```
+
+  - **Pop : afterView -> beforeView**
+
+  - ```
+    - afterView.ControllerviewWillDisappear()
+    - beforeViewController.viewWillAppear()
+    - afterViewController.viewDisDisappear()
+    - beforeViewController.viewDidAppear()
+    ```
+
+    
+
+    네비게이션뷰컨트롤러는 두 개의 뷰 컨트롤러가 라이프 사이클 메소드를 주고 받듯 순서를 거치며 view가 전환된다.
