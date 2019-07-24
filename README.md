@@ -8,6 +8,8 @@
 
 <a href ="#3-Step3---IB">Step3 - IBOutlet, IBAction</a>
 
+<a href ="#4-Step4---Segue">Step4 - Segue</a>
+
 ---
 
 # Intro
@@ -339,4 +341,128 @@ y = 7
 | **applicationReserved**    | 앱의 사용에 따라 지정할 수 있는 컨트롤 이벤트 값의 범위      |
 | **systemReserved**         | 내부 프레임워크 내에서 사용되는 예약된 컨트롤 이벤트 값의 범위 |
 | **allEvents**              | 시스템 이벤트를 포함한 모든 이벤트                           |
+
+---
+
+## 4. Step4 - Segue
+
+### Segue
+
+>하나의 Scene 으로부터 다른 Scene으로의 전환을 보여주는 연결입니다.
+
+- **Segue Type**
+
+| Symbol                                                       | Type                            | Description                                                  |
+| :----------------------------------------------------------- | :------------------------------ | :----------------------------------------------------------- |
+| ![img](https://help.apple.com/xcode/mac/current/en.lproj/Art/SB_segue_push.png) | Show  <br/>**(Push)**           | 이 segue는 **target view controller**의 **`showViewController:sender:`** 가 실행된다.<br/> 일반적으로는 **source View Controller**위에 새로운 컨텐트가 모달로 보여진다.<br/> 몇몇 뷰컨트롤러들은 해당 메소드가 재정의 되어있어서 다른동작을 한다.<br/>UIKit은 **`targetViewControllerForAction:sender:`**메소드로 **source View Controller** 를 찾는다. <br/><br/>예) **NavigationViewController** 는 새로운 뷰컨트롤러를 네비게이션 스택에 push 한다. |
+| ![img](https://help.apple.com/xcode/mac/current/en.lproj/Art/SB_segue_push.png) | Show Detail  <br/>**(Replace)** | 이 segue는 **target view controller** 의 **`showDetailViewController:sender:`**메소드가 실행된다.<br/> 이 segue는 **UISplitViewController** 객체 내에 내장된 view controller에  대해서만 관련된 **segue**이다. <br/> split view controller는  자식 뷰컨트롤러를 새로운 컨텐츠로 replace합니다.<br/>나머지 대부분의 view controller에서는 모달로 보여줍니다. |
+| ![img](https://help.apple.com/xcode/mac/current/en.lproj/Art/SB_segue_modal.png) | Present Modally                 | 이 segue는 view controller를 **모달**로 보여준다.<br/>       |
+| ![img](https://help.apple.com/xcode/mac/current/en.lproj/Art/SB_segue_popover.png) | Present as Popover              | 기존 view 에 앵커를 둔 컨텐츠를 보여줍니다.                  |
+| ![img](https://help.apple.com/xcode/mac/current/en.lproj/Art/SB_segue_custom.png) | Custom                          | 개발자가 지정한 행동을 하는 segue입니다.                     |
+
+
+
+- **UIModalTransitionStyle(animation - 전환 효과 )**
+
+- ```swift
+  enum UIModalTransitionStyle: Int {
+    	case coverVertical 
+    // viewcontroller가 전환될 때 view가 미끄러지듯이 올라오고, dissmiss시 내려가는 기본 transtion스타일
+  		case flipHorizontal
+    // 오른쪽에서 왼쪽으로 수평회전을 한다. 🔄 새로 떠오르는 뷰가 이전 뷰의 뒷면에 있던 것처럼 보인다. 뒤집히는 모양의 transition
+  		case crossDissolve
+    // 이전 뷰가 흐릿해지고 전환될 뷰가 뚜렷해지는 효과가 동시에 일어난다.
+  		case partialCurl
+    // 한 쪽 코너에서 전환될 뷰가 말아 올라오는 형태로 드러난다. UIModalPresentationStyle.fullScreen 에서만 지원되고 , 다른 형태에서 사용시 exception이 발생한다
+  }
+  ```
+
+- **UIModalPresentStyle**
+
+- ```swift
+  enum UIModalPresentStyle: Int {
+    case automatic
+  	// 시스템이 보여주는 방식을 정한다.
+  	case fullScreen
+  	// 스크린을 덮는 보여주는 방식
+  	case pageSheet
+    // 기본 뷰를 일부분을 덮는 보여주는 방식
+  	case formSheet
+    // 스크린의 중앙에 컨텐츠를 보여주는 방식
+  	case currentContext
+    // 다른 뷰컨트롤러를 통해 내용을 보여주는 방식
+  A presentation style where the content is displayed over another view controller’s content.
+  	case custom
+    // 사용자 정의 animator 객체로 부터 관리되는 보여주는 방식
+  	case overFullScreen
+    // 스크린을 덮는 뷰를 보여주는 방식
+  	case overCurrentContext
+    // 다른 뷰 컨트롤러의 컨텐츠를 통해 보여주는 방식
+  	case blurOverFullScreen
+    // 새로 표현하는 뷰를 보여주기 전에 기존의 뷰를 흐릿하게 하며 보여주는 방식
+  	case popover
+    // popover뷰로 보여주는 방식
+  	case none
+  
+  }
+  ```
+
+  
+
+- #### Show (Push)
+
+  ![showPush](https://user-images.githubusercontent.com/39197978/61460661-23b35300-a9aa-11e9-970a-ffb67cd0a10d.gif)
+
+  - **UINavigationViewController**의 경우 **Navigation Stack**에 viewcontroller가 **push**된다.
+
+  - 위의 **NavigationBar**의 **Item**을 보면 `< Back` 을 누르면 현재 viewcontroller가 **pop**된다.
+
+    
+
+- #### Present Modally
+
+  ![presentModally](https://user-images.githubusercontent.com/39197978/61460660-23b35300-a9aa-11e9-82e0-8cefad226927.gif)
+
+  - viewcontroller를 modal로 보여주는 방식이다,
+  - 이전 view를 가리는 새로운 view가 보여지는 방식이다.
+
+
+
+- #### CustomSegue
+
+  ![customSegue2](https://user-images.githubusercontent.com/39197978/61465239-a7713d80-a9b2-11e9-9259-bdda110579d1.gif)
+
+  - 사용자 정의 **segue** 이다.
+  - 개발자가 정의한 대로 동작하고 **`UIStoryboardSegue`**를 상속하며 , **`perform()`**을 재정의하여 동작하게 할 수 있다.
+
+  
+
+- #### Prepare
+
+  ![Prepare](https://user-images.githubusercontent.com/39197978/61465255-acce8800-a9b2-11e9-97dd-ee9320b6f7bf.gif)
+
+  - **Segue** 가 발생하여 다른 viewcontroller로 전환되기 직전에 발생하는 **`prepare()`**가 호출된다.
+  - **source viewcontroller**에서 **destination viewcontroller** 로 *data*를 넘기기위해 사용할 수 있다. 
+
+- #### Unwind
+
+  ---
+
+- **액션메소드 정의하기**<br/>
+![스크린샷 2019-07-18 오후 3.52.47](/Users/ldcpaul/Downloads/스크린샷/스크린샷 2019-07-18 오후 3.52.47.png)
+
+  - **unwind()** 의 **destination**이 될 viewcontroller를 정한다.
+  - 그 곳에 **unwindSegue**를 받을 수 있는   **@IBAction** 메소드를 정의해둔다.
+
+
+
+
+
+- **Exit 연결하기**
+
+  <img width="251" alt="스크린샷 2019-07-18 오후 4 27 41" src="https://user-images.githubusercontent.com/39197978/61466831-8f4eed80-a9b5-11e9-9820-c735fbbe0cd4.png">
+
+  - **segue**의 트리거를 드래그해서 **exit**에 놓는다. 
+  - **IBAction**으로 정의된 메소드 목록이 노출되고 거기에 연결된다.
+
 
