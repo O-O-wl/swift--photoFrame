@@ -12,6 +12,10 @@
 
 <a href ="#5-Step5---ViewController">Step5 - ViewController</a>
 
+<a href ="#6-Step6---View-Controller-Container">Step6 - View Controller Container</a>
+
+
+
 ---
 
 # Intro
@@ -730,7 +734,7 @@ y = 7
 
 
 
-### 6. Step6 -  View Controller Containter
+### 6. Step6 -  View Controller Container
 
 
 
@@ -756,7 +760,7 @@ UIKit은 위 3개의 Container View Controller를 내장하고 있다.
 
 
 
-##### 컨테이너 뷰 컨트롤러를 설계하면서 고민해야하는 사항
+#### 컨테이너 뷰 컨트롤러를 설계하면서 고민해야하는 사항
 
 - 컨테이너와 자식 각각의 역할을 무엇인가?
 - 얼마나 많은 뷰 컨트롤러들이 동시에 디스플레이 되어야 하는가?
@@ -769,7 +773,7 @@ UIKit은 위 3개의 Container View Controller를 내장하고 있다.
 
 
 
-#### UINavigationController 
+#### `UINavigationController` 
 
 >계층적인 컨텐트를 stack형태로 다루는 Container view controller
 >
@@ -779,7 +783,7 @@ UIKit은 위 3개의 Container View Controller를 내장하고 있다.
 
 <img width="772" alt="스크린샷 2019-07-28 오후 7 55 18" src="https://user-images.githubusercontent.com/39197978/62006687-f0797c80-b17e-11e9-985a-405dfaf575b4.png">
 
-##### 특징
+#### 특징
 
 - `UINavigationController`는 계층적인 데이터의 집합을 디스플레이한다.
 
@@ -809,9 +813,9 @@ view프로퍼티의  `var view: UIView!`는 NavigationBar, ToolBar( 옵션 ), �
 
 
 
+#### `Navigation stack`
 
 
-##### Navigation stack
 
 **UINavigationViewController**는 child View Controller 를 **정렬된 배열의 형태로 관리**한다.
 
@@ -819,7 +823,7 @@ view프로퍼티의  `var view: UIView!`는 NavigationBar, ToolBar( 옵션 ), �
 
 그리고 스택 최상단에 위치한 뷰컨트롤러가 화면에 보여진다.
 
-스택에 뷰컨트롤러를 세그웨이를 이용해서 **추가(Push)**하거나 **제거(Pop)**할 수 있다. 
+스택에 뷰컨트롤러를 세그웨이를 이용해서 **추가(Push)**  하거나 **제거(Pop)** 할 수 있다. 
 
 `UINavigationControllerDelegate` protocol을 채택함으로써, push, pop 동작을 재정의 할 수있다.
 
